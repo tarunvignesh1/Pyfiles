@@ -1,7 +1,7 @@
 import numpy as np
 from itertools import product
 
-with open("./datafileday11.txt") as fin:
+with open("datafileday11.txt") as fin:
     raw_data = fin.read().strip()
 data = np.array([[int(x) for x in list(i)]
                 for i in raw_data.split("\n")], dtype=int)
