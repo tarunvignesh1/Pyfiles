@@ -23,7 +23,7 @@ global ans
 ans = 0
 
 # Do some DFS!
-visited = set()
+visited = defaultdict(int)
 
 
 def dfs(cave):
@@ -33,11 +33,22 @@ def dfs(cave):
         ans += 1
         return
 
-    if is_small(cave) and cave in visited:
-        return
-
     if is_small(cave):
-        visited.add(cave)
+        visited[cave] += 1
+
+        # Check if this cave is good to go
+        more_than_once = 0  # How many small caves are visited more than once
+        for small in visited:
+            more_than_once += visited[small] > 1
+
+            # No small cave can be visited more than twice
+            if visited[small] > 2:
+                visited[cave] -= 1
+                return
+
+        if more_than_once > 1:
+            visited[cave] -= 1
+            return
 
     # Add all neighbors to queue
     for nbr in adj[cave]:
@@ -48,10 +59,9 @@ def dfs(cave):
 
     # At the end, remove this from the DFS
     if is_small(cave):
-        visited.remove(cave)
+        visited[cave] -= 1
 
 
 dfs("start")
-
 
 print(ans)
